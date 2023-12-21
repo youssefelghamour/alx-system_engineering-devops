@@ -19,3 +19,7 @@ The project consists of several Bash script files, each addressing specific requ
 | `8-for_ls` | Lists content of the current directory with specific formatting using a for loop |
 | `9-to_file_or_not_to_file` | Checks and provides information about the school file using if and else statements |
 | `10-fizzbuzz` | Displays numbers from 1 to 100 with FizzBuzz conditions using a while loop |
+| `100-read_and_cut`  | Displays the content of the file /etc/passwd using a while loop      |
+| `101-tell_the_story_of_passwd` | Displays information about users in /etc/passwd using a while loop + IFS |
+| `102-lets_parse_apache_logs` | Displays visitor IP and HTTP status code from Apache log using awk |
+| `103-dig_the_data`  | Groups visitors by IP and HTTP status code, displaying occurrence numbers using awk |
