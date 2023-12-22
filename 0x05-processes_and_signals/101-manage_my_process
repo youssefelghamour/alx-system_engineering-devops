@@ -17,7 +17,7 @@
 #   Displays Usage: manage_my_process {start|stop|restart} if any other argument or no argument is passed
 if [ "$1" == "start" ]
 then
-    ./manage_my_process
+    ./manage_my_process &
     echo $$ > /var/run/my_process.pid
     echo "manage_my_process started"
 
@@ -31,7 +31,7 @@ elif [ "$1" == "restart" ]
 then
     pkill manage_my_process
     rm /var/run/my_process.pid
-    ./manage_my_process
+    ./manage_my_process &
     echo $$ > /var/run/my_process.pid
     echo "manage_my_process restarted"
 
