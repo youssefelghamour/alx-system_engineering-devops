@@ -13,3 +13,7 @@ This project delves into the realm of processes and signals in Bash scripting. T
 | `6-stop_me_if_you_can` | Stops the 4-to_infinity_and_beyond process without using kill or killall |
 | `7-highlander` | Displays "To infinity and beyond" with "I am invincible!!!" on SIGTERM signal |
 | `8-beheaded_process` | Kills the 7-highlander process |
+| `100-process_and_pid_file` | Manages processes and PID files.                                                                         |
+| `manage_my_process`        | Indefinitely writes "I am alive!" to a file |
+| `101-manage_my_process`    | Bash (init) script to manage `manage_my_process`.                                                        |
+| `102-zombie.c`             | Creates 5 zombie processes.                                                                             |
