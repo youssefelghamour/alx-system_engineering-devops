@@ -15,6 +15,7 @@ exec { 'custom_header':
   provider => shell,
 }
 
-service { 'nginx':
-  ensure    => running,
+exec { 'restart nginx':
+  command  => 'sudo service nginx restart',
+  provider => shell,
 }
