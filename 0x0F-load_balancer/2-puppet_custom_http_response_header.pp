@@ -2,20 +2,20 @@
 
 exec {'update':
   provider => shell,
-  command  => 'sudo apt-get -y update',
+  command  => 'sudo apt-get -y update'
 }
 
 exec {'install Nginx':
   provider => shell,
-  command  => 'sudo apt-get -y install nginx',
+  command  => 'sudo apt-get -y install nginx'
 }
 
 exec { 'custom_header':
   command  => 'sudo sed -i "s/include \/etc\/nginx\/sites-enabled\/\*;/include \/etc\/nginx\/sites-enabled\/\*;\n\tadd_header X-Served-By \"$hostname\";/" /etc/nginx/nginx.conf',
-  provider => shell,
+  provider => shell
 }
 
 exec { 'restart nginx':
   command  => 'sudo service nginx restart',
-  provider => shell,
+  provider => shell
 }
