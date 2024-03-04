@@ -15,5 +15,5 @@ file_line { 'http_header':
 }
 
 service { 'nginx':
-  ensure    => running,
+  command => '/usr/sbin/service nginx start',
 }
