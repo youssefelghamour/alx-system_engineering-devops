@@ -9,6 +9,6 @@ apt-get -y install haproxy
 mv /etc/haproxy/haproxy.cfg{,.original}
 
 # Configure HAProxy with a new frontend and backend
-echo -e "\nfrontend http\n\tbind *:80\n\tmode http\n\tdefault_backend web-servers\n\nbackend web-servers\n\tbalance roundrobin\n\tserver 511149-web-01 18.204.9.11:80 check\n\tserver 511149-web-02 18.233.66.83:80 check" | sudo tee -a /etc/haproxy/haproxy.cfg
+echo -e "\nfrontend http\n\tbind *:80\n\tmode http\n\tdefault_backend web-servers\n\nbackend web-servers\n\tbalance roundrobin\n\tmode http\n\tserver 511149-web-01 18.204.9.11:80 check\n\tserver 511149-web-02 18.233.66.83:80 check" | sudo tee -a /etc/haproxy/haproxy.cfg
 
 service haproxy restart
