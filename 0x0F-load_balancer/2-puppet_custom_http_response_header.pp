@@ -1,16 +1,25 @@
 # Installs and configures Nginx web server with Puppet
 
-package { 'nginx':
-  ensure => installed,
+exec {'update':
+  provider => shell,
+  command  => 'sudo apt-get -y update',
+  before   => Exec['install Nginx'],
+}
+
+exec {'install nginx':
+  provider => shell,
+  command  => 'sudo apt-get -y install nginx',
+  before   => Exec['add_header'],
 }
 
 exec { 'custom_header':
-  command => 'sed -i "s/include \/etc\/nginx\/sites-enabled\/\*;/include \/etc\/nginx\/sites-enabled\/\*;\n\tadd_header X-Served-By \"<hostname>\";/" /etc/nginx/nginx.conf',
-  notify  => Service['nginx'],
+  provider    => shell,
+  environment => ["HOST=${hostname}"],
+  command     => 'sudo sed -i "s/include \/etc\/nginx\/sites-enabled\/\*;/include \/etc\/nginx\/sites-enabled\/\*;\n\tadd_header X-Served-By \"$HOST\";/" /etc/nginx/nginx.conf',
+  before      => Exec['restart Nginx'],
 }
 
-service { 'nginx':
-  ensure   => running,
-  enable   => true,
-  provider => systemd,
+exec { 'restart nginx':
+  provider => shell,
+  command  => 'sudo service nginx restart',
 }
