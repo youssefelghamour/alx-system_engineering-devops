@@ -5,16 +5,17 @@ exec {'update':
   command  => 'sudo apt-get -y update',
 }
 
-package { 'nginx':
-  ensure => installed,
-}
-
-exec { 'custom_header':
-  environment => ["HOSTNAME=${hostname}"],
-  command  => 'sed -i "s/include \/etc\/nginx\/sites-enabled\/\*;/include \/etc\/nginx\/sites-enabled\/\*;\n\tadd_header X-Served-By \"$HOSTNAME\";/" /etc/nginx/nginx.conf',
+-> exec {'install Nginx':
   provider => shell,
+  command  => 'sudo apt-get -y install nginx'
 }
 
-service { 'nginx':
-  ensure    => running,
+-> file_line { 'http_header':
+  path  => '/etc/nginx/nginx.conf',
+  match => 'http {',
+  line  => "http {\n\tadd_header X-Served-By \"${hostname}\";",
+}
+
+-> exec {'start nginx':
+  command => '/usr/sbin/service nginx start',
 }
