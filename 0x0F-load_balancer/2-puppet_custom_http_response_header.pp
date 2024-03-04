@@ -1,19 +1,25 @@
 # Installs and configures Nginx web server with Puppet
 
-exec {'update':
-  command => '/usr/bin/apt-get update',
+package { 'nginx':
+  ensure => installed,
 }
 
--> package {'nginx':
-  ensure => 'present',
+file { '/var/www/html/index.html':
+  ensure  => present,
+  content => 'Hello World!',
 }
 
--> file_line { 'http_header':
-  path  => '/etc/nginx/nginx.conf',
-  match => 'http {',
-  line  => "http {\n\tadd_header X-Served-By \"${hostname}\";",
+exec { 'configure_nginx':
+  command  => 'sed -i "s/server_name _;/server_name _;\n\trewrite ^\/redirect_me https:\/\/github.com\/youssefelghamour permanent;/" /etc/nginx/sites-available/default',
+  provider => shell,
 }
 
--> service { 'nginx':
-  command => '/usr/sbin/service nginx start',
+exec { 'custom_header':
+  environment => ["HOSTNAME=${hostname}"],
+  command  => 'sed -i "s/include \/etc\/nginx\/sites-enabled\/\*;/include \/etc\/nginx\/sites-enabled\/\*;\n\tadd_header X-Served-By \"$HOSTNAME\";/" /etc/nginx/nginx.conf',
+  provider => shell,
+}
+
+service { 'nginx':
+  ensure    => running,
 }
