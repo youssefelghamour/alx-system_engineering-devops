@@ -5,8 +5,9 @@ exec {'update':
   command  => 'sudo apt-get -y update',
 }
 
-package { 'nginx':
-  ensure => installed,
+exec {'install Nginx':
+  provider => shell,
+  command  => 'sudo apt-get -y install nginx',
 }
 
 exec { 'custom_header':
