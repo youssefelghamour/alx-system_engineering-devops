@@ -11,7 +11,7 @@ exec {'install Nginx':
 }
 
 exec { 'custom_header':
-  command  => 'sudo sed -i "s/include \/etc\/nginx\/sites-enabled\/\*;/include \/etc\/nginx\/sites-enabled\/\*;\n\tadd_header X-Served-By \"${hostname}\";/" /etc/nginx/nginx.conf',
+  command  => 'sudo sed -i "s/include \/etc\/nginx\/sites-enabled\/\*;/include \/etc\/nginx\/sites-enabled\/\*;\n\tadd_header X-Served-By \"$hostname\";/" /etc/nginx/nginx.conf',
   provider => shell,
 }
 
