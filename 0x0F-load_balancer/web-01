@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+# connect to the web-01 server
+ssh -i ~/.ssh/id_rsa ubuntu@18.204.9.11
