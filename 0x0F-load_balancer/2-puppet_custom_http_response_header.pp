@@ -1,5 +1,10 @@
 # Installs and configures Nginx web server with Puppet
 
+exec {'update':
+  provider => shell,
+  command  => 'sudo apt-get -y update',
+}
+
 package { 'nginx':
   ensure => installed,
 }
