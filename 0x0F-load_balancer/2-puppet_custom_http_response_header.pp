@@ -14,7 +14,6 @@ file_line { 'http_header':
   line  => "http {\n\tadd_header X-Served-By \"${hostname}\";",
 }
 
-exec { 'restart nginx':
-  command  => 'sudo service nginx restart',
-  provider => shell
+service { 'nginx':
+  ensure    => running,
 }
