@@ -10,9 +10,10 @@ exec {'install Nginx':
   command  => 'sudo apt-get -y install nginx'
 }
 
-exec { 'custom_header':
-  command  => 'sudo sed -i "s/include \/etc\/nginx\/sites-enabled\/\*;/include \/etc\/nginx\/sites-enabled\/\*;\n\tadd_header X-Served-By \"$hostname\";/" /etc/nginx/nginx.conf',
-  provider => shell
+file_line { 'http_header':
+  path  => '/etc/nginx/nginx.conf',
+  match => 'http {',
+  line  => "http {\n\tadd_header X-Served-By \"${hostname}\";",
 }
 
 exec { 'restart nginx':
