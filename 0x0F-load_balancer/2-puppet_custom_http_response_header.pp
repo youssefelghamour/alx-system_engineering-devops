@@ -17,5 +17,5 @@ file_line { 'custom_header':
 } ->
 
 exec {'start nginx':
-  command => 'sudo service nginx start',
+  command => '/usr/sbin/service nginx start',
 }
