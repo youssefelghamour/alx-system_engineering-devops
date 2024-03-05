@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+echo "server {
+    listen 80;
+    server_name _;
+    location / {
+        root /usr/share/nginx/html;
+        index index.html;
+    }
+}" >> /etc/nginx/sites-available/default
+
+service nginx restart
