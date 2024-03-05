@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 # Script that install and configure HAproxy on the lb-01 server
 
+# Set non-interactive mode for apt-get to avoid prompts during installation
+export DEBIAN_FRONTEND=noninteractive
+
 apt-get -y update
 
 apt-get -y install haproxy
