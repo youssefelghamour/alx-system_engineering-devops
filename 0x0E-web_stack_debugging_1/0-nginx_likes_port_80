@@ -1,12 +1,7 @@
 #!/usr/bin/env bash
+# configures Nginx to listen on port 80
 
-echo "server {
-    listen 80;
-    server_name _;
-    location / {
-        root /usr/share/nginx/html;
-        index index.html;
-    }
-}" >> /etc/nginx/sites-available/default
+sed -i "s/listen 8080 default_server;/listen 80 default_server;/" /etc/nginx/sites-enabled/default
+sed -i "s/listen \[::\]:8080 default_server ipv6only=on;/listen \[::\]:80 default_server;/" /etc/nginx/sites-enabled/default
 
 service nginx restart
