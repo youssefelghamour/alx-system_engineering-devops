@@ -1,3 +1,5 @@
+# This file (not part of the project's files) contains the steps I took to configure haproxy with https in my load balancer server
+
 # Update the package list to ensure the latest versions are available
 sudo apt update
 
