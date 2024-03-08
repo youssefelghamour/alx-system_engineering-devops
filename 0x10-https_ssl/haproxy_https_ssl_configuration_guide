@@ -1,0 +1,29 @@
+# Update the package list to ensure the latest versions are available
+sudo apt update
+
+# Install snapd, a package management tool for snap packages
+sudo apt install snapd
+
+# Remove the existing certbot package just in case
+sudo apt-get remove certbot
+
+# Install the certbot package
+sudo apt-get install certbot
+
+# Obtain an SSL/TLS certificate using certbot in standalone mode with HTTP challenge
+sudo certbot certonly --standalone --preferred-challenges http --http-01-port 80 -d www.youssefghr.tech
+
+# Just to check: List the contents of the directory where the SSL/TLS certificates are stored
+sudo ls /etc/letsencrypt/live/www.youssefghr.tech
+
+# Create a directory to store HAProxy certificates
+sudo mkdir -p /etc/haproxy/certs
+
+# Set the DOMAIN variable for convenience and concatenate the full chain and private key into a single PEM file for HAProxy
+DOMAIN='www.youssefghr.tech' sudo -E bash -c 'cat /etc/letsencrypt/live/$DOMAIN/fullchain.pem /etc/letsencrypt/live/$DOMAIN/privkey.pem > /etc/haproxy/certs/$DOMAIN.pem'
+
+# Restrict permissions for HAProxy certificates to enhance security
+sudo chmod -R go-rwx /etc/haproxy/certs
+
+# Edit the HAProxy configuration file using the vim text editor and copy paste the configuration in the 1-haproxy_ssl_termination file
+sudo vi /etc/haproxy/haproxy.cfg
