@@ -46,28 +46,49 @@ On web-01:
 mysql -u root -p
 
 # Create database tyrell_corp
-CREATE DATABASE tyrell_corp;
+mysql> CREATE DATABASE tyrell_corp;
 
 # Use the tyrell_corp database
-USE tyrell_corp;
+mysql> USE tyrell_corp;
 
 # Create table nexus6
-CREATE TABLE nexus6 (
+mysql> CREATE TABLE nexus6 (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255)
 );
 
 # Insert at least one entry into the nexus6 table
-INSERT INTO nexus6 (name) VALUES ('Leon');
+mysql> INSERT INTO nexus6 (name) VALUES ('Leon');
 
 # Grant SELECT permissions to holberton_user on the nexus6 table
-GRANT SELECT ON tyrell_corp.nexus6 TO 'holberton_user'@'localhost';
+mysql> GRANT SELECT ON tyrell_corp.nexus6 TO 'holberton_user'@'localhost';
 
 # Flush privileges to apply changes
-FLUSH PRIVILEGES;
+mysql> FLUSH PRIVILEGES;
 
 # Exit MySQL
-exit
+mysql> exit
+```
+
+On web-02:
+```bash
+# Connect to MySQL
+mysql -u root -p
+
+# Create database tyrell_corp
+mysql> CREATE DATABASE tyrell_corp;
+
+# Create the same database and table, since replication hasn't been set
+# They won't be created, so we have to do that manually
+# Missing databases and tables on the slave before setting up replication can cause errors
+# After replication is set, all changes will be automatically replicated
+mysql> USE tyrell_corp;
+mysql> CREATE TABLE nexus6 (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255)
+);
+
+mysql> exit
 ```
 
 ### Task #3: Configuring MySQL replication
@@ -132,10 +153,6 @@ mysql> START SLAVE;
 
 # Check MySQL replication status
 mysql> SHOW SLAVE STATUS\G
-
-# Troubleshoot and fix replication errors
-mysql> SET GLOBAL SQL_SLAVE_SKIP_COUNTER = 1;
-mysql> START SLAVE;
 ```
 
 ### Task #5: MySQL backup
