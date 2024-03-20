@@ -99,7 +99,7 @@ On web-01:
 mysql -u root -p
 
 # Create a MySQL user for replication
-mysql> CREATE USER 'replica_user'@'%' IDENTIFIED BY 'replica_password';
+mysql> CREATE USER 'replica_user'@'%' IDENTIFIED BY 'projectcorrection280hbtn';
 mysql> GRANT REPLICATION SLAVE ON *.* TO 'replica_user'@'%';
 mysql> FLUSH PRIVILEGES;
 mysql> SHOW MASTER STATUS;
@@ -119,7 +119,7 @@ server-id = 1
 log_bin = /var/log/mysql/mysql-bin.log
 binlog_do_db = tyrell_corp
 
-# comment the bind-addres line: 
+# comment out the bind-addres line: 
 # bind-address  = 127.0.0.1
 # Save and exit the editor
 # Restart MySQL service
