@@ -21,7 +21,7 @@ if __name__ == "__main__":
     users = requests.get(url_users).json()
     todos = requests.get(url_todos).json()
 
-    user_name = users['name']
+    user_name = users['username']
 
     csv_filename = "{}.csv".format(user_id)
 
