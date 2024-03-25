@@ -31,7 +31,8 @@ if __name__ == "__main__":
 
         lst.append(dct)
 
+    dct1 = {str(user_id): lst}
     json_filename = "{}.json".format(user_id)
 
     with open(json_filename, 'w') as jsonfile:
-        json.dump(lst, jsonfile)
+        json.dump(dct1, jsonfile)
