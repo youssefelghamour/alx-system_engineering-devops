@@ -1,38 +1,31 @@
 #!/usr/bin/python3
-""" function that queries the Reddit API """
+"""
+Function that queries the Reddit API and prints
+the top ten hot posts of a subreddit
+"""
+import re
 import requests
-after = None
+import sys
 
 
-def count_words(subreddit, word_list):
-    """Count the titles found with wordlist in subreddit"""
-    my_list = recurse(subreddit)
-    my_dict = {}
+def add_title(dictionary, hot_posts):
+    """ Adds item into a list """
+    if len(hot_posts) == 0:
+        return
 
-    if my_list:
-        for word in word_list:
-            word = word.lower()
-            my_dict[word] = 0
-
-        for title in my_list:
-            title_split = title.split(" ")
-
-            for iter in title_split:
-                for iter_split in word_list:
-                    if iter.lower() == iter_split.lower():
-                        my_dict[iter_split.lower()] = my_dict.get(iter_split.lower(), 0) + 1
-
-        for key, val in sorted(my_dict.items(),  key=lambda x: x[1],
-                               reverse=True):
-            if val != 0:
-                print("{}: {}".format(key, val))
+    title = hot_posts[0]['data']['title'].split()
+    for word in title:
+        for key in dictionary.keys():
+            c = re.compile("^{}$".format(key), re.I)
+            if c.findall(word):
+                dictionary[key] += 1
+    hot_posts.pop(0)
+    add_title(dictionary, hot_posts)
 
 
-def recurse(subreddit, hot_list=[]):
-    """ recursively queries the Reddit API, parses titles,
-        and counts keyword occurrences
-    """
-    global after
+def recurse(subreddit, dictionary, after=None):
+    """ Queries to Reddit API """
+    u_agent = 'Mozilla/5.0'
     CLIENT_ID = 'zL8evAsF03DzVk_TArVH3g'
     SECRET_KEY = 'FT7BTQs-WLEtZEOlH_2mE2QEQ8CV2g'
 
@@ -55,19 +48,36 @@ def recurse(subreddit, hot_list=[]):
 
     url = "https://www.reddit.com/r/{}/hot.json".format(subreddit)
     params = {'after': after}
-    response = requests.get(url, auth=auth, data=data, headers=headers,
+    res = requests.get(url, auth=auth, data=data, headers=headers,
                             params=params, allow_redirects=False)
 
-    if response.status_code == 200:
-        prox = response.json().get('data').get('after')
+    if res.status_code != 200:
+        return None
 
-        if prox is not None:
-            after = prox
-            recurse(subreddit, hot_list)
-        list_titles = response.json().get('data').get('children')
+    dic = res.json()
+    hot_posts = dic['data']['children']
+    add_title(dictionary, hot_posts)
+    after = dic['data']['after']
+    if not after:
+        return
+    recurse(subreddit, dictionary, after=after)
 
-        for title_ in list_titles:
-            hot_list.append(title_.get('data').get('title').lower())
-        return hot_list
+
+def count_words(subreddit, word_list):
+    """ Init function """
+    dictionary = {}
+
+    for word in word_list:
+        dictionary[word] = 0
+
+    recurse(subreddit, dictionary)
+
+    ls = sorted(dictionary.items(), key=lambda kv: kv[1])
+    ls.reverse()
+
+    if len(ls) != 0:
+        for item in ls:
+            if item[1] != 0:
+                print("{}: {}".format(item[0], item[1]))
     else:
-        return (None)
+        print("")
