@@ -8,12 +8,30 @@ def number_of_subscribers(subreddit):
         subscribers (not active users, total subscribers) for a given
         subreddit. If an invalid subreddit is given, the function returns 0
     """
+    CLIENT_ID = 'zL8evAsF03DzVk_TArVH3g'
+    SECRET_KEY = 'FT7BTQs-WLEtZEOlH_2mE2QEQ8CV2g'
+
+    auth = requests.auth.HTTPBasicAuth(CLIENT_ID, SECRET_KEY)
+
+    data = {
+        'grant_type': 'password',
+        'username': 'Responsible-Big4336',
+        'password': 'password123'
+    }
+
+    headers = {'User-Agent': 'MyAPI1'}
+
+    res = requests.post('https://www.reddit.com/api/v1/access_token',
+                        auth=auth, data=data, headers=headers)
+
+    TOKEN = res.json()['access_token']
+
+    headers['Authorization'] = "bearer {}".format(TOKEN)
+
     url = "https://www.reddit.com/r/{}/about.json".format(subreddit)
-    headers = {'User-Agent': 'Mozilla/5.0'}
-    response = requests.get(url, headers=headers, allow_redirects=False)
+    response = requests.get(url, auth=auth, data=data, headers=headers)
 
     if response.status_code == 200:
-        data = response.json()
-        return data['data']['subscribers']
+        return response.json()['data']['subscribers']
     else:
         return 0
