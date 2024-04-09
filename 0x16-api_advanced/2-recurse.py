@@ -35,14 +35,7 @@ def recurse(subreddit, hot_list=[], after=None):
     if response.status_code != 200:
         return None
 
-    if 'data' not in response.json():
-        return None
-
     data = response.json()['data']
-
-    if 'children' not in data:
-        return None
-
     posts = data['children']
     after = data['after']
 
