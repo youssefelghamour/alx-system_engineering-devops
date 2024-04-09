@@ -45,10 +45,11 @@ def count_words(subreddit, word_list, after=None, counts=None):
 
     for post in posts:
         title = post['data']['title'].lower()
+        unique_words = set(title.split())
         for word in word_list:
             word = word.lower()
 
-            if word in title:
+            if word in unique_words:
                 # Get the current count for the word or default to 0
                 count = counts.get(word, 0)
                 # Increment the count by 1 and update the dictionary
