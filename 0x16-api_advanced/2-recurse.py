@@ -3,7 +3,7 @@
 import requests
 
 
-def recurse(subreddit, hot_list=[]):
+def recurse(subreddit, hot_list=[], after=None):
     """ queries the Reddit API and prints the titles of the first 10 hot
         posts listed for a given subreddit.
     """
@@ -28,17 +28,22 @@ def recurse(subreddit, hot_list=[]):
     headers['Authorization'] = "bearer {}".format(TOKEN)
 
     url = "https://www.reddit.com/r/{}/hot.json".format(subreddit)
+    params = {'after': after}
     response = requests.get(url, auth=auth, data=data, headers=headers,
-                            allow_redirects=False)
+                            params=params, allow_redirects=False)
 
     if response.status_code != 200:
         return None
 
-    d = response.json()
-    posts = d['data']['children']
+    data = response.json()['data']
+    posts = data['children']
+    after = data['after']
 
     for post in posts:
-        hot_list.append(post)
-    
-    return hot_list
-        
+        hot_list.append(post['data']['title'])
+
+    if after:
+        # get the next page
+        return recurse(subreddit, hot_list, after)
+    else:
+        return hot_list
