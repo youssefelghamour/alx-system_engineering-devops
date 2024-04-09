@@ -3,6 +3,18 @@
 import requests
 
 
+def add_title(hot_list, posts):
+    """ appends post titles to the hot_list """
+    if len(posts) == 0:
+        return
+
+    hot_list.append(posts[0]['data']['title'])
+
+    posts.pop(0)
+
+    add_title(hot_list, posts)
+
+
 def recurse(subreddit, hot_list=[], after=None):
     """ queries the Reddit API and prints the titles of the first 10 hot
         posts listed for a given subreddit.
@@ -32,17 +44,17 @@ def recurse(subreddit, hot_list=[], after=None):
     response = requests.get(url, auth=auth, data=data, headers=headers,
                             params=params, allow_redirects=False)
 
-    if response.status_code == 200:
-        data = response.json()
-        posts = data['data']['children']
-        after = data['data']['after']
-
-        for post in posts:
-            hot_list.append(post['data']['title'])
-
-        if after is not None:
-            recurse(subreddit, hot_list, after)
-        else:
-            return hot_list
-    else:
+    if response.status_code != 200:
         return None
+
+    data = response.json()
+    posts = data['data']['children']
+
+    add_title(hot_list, posts)
+
+    after = data['data']['after']
+
+    if not after:
+        return hot_list
+
+    return recurse(subreddit, hot_list=hot_list, after=after)
