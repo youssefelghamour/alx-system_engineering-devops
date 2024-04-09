@@ -32,18 +32,17 @@ def recurse(subreddit, hot_list=[], after=None):
     response = requests.get(url, auth=auth, data=data, headers=headers,
                             params=params, allow_redirects=False)
 
-    if response.status_code != 200:
-        return None
+    if response.status_code == 200:
+        data = response.json()
+        posts = data['data']['children']
+        after = data['data']['after']
 
-    data = response.json()['data']
-    posts = data['children']
-    after = data['after']
+        for post in posts:
+            hot_list.append(post['data']['title'])
 
-    for post in posts:
-        hot_list.append(post['data']['title'])
-
-    if after:
-        # get the next page
-        return recurse(subreddit, hot_list, after)
+        if after is not None:
+            recurse(subreddit, hot_list, after)
+        else:
+            return hot_list
     else:
-        return hot_list
+        return None
