@@ -1,4 +1,24 @@
 #!/usr/bin/env bash
 # reloads gunicorn
 
-pgrep gunicorn | xargs -r kill -s HUP
+# Get the process IDs of Gunicorn
+pgrep_gunicorn=$(pgrep gunicorn)
+
+# Display the current Gunicorn processes
+echo "Current Gunicorn processes:"
+pgrep gunicorn
+
+# Gracefully restart Gunicorn workers
+if [[ -n $pgrep_gunicorn ]]; then
+    echo "Reloading Gunicorn gracefully..."
+    for pid in $pgrep_gunicorn; do
+        echo "Gracefully restarting worker $pid..."
+        kill -s HUP "$pid"
+    done
+else
+    echo "No Gunicorn processes found."
+fi
+
+# Display the updated Gunicorn processes
+echo "Updated Gunicorn processes:"
+pgrep gunicorn
