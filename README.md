@@ -34,3 +34,5 @@ This repository contains various projects completed during the ALX Software Engi
 | 0x19-postmortem                                | Analyzing and reporting system failures                 |
 | 0x1A-application_server                        | Configuring and deploying application servers           |
 | 0x1B-web_stack_debugging_4                     | Advanced web stack debugging                            |
+
+![Web infrastructure](./Application%20server.jpg)
